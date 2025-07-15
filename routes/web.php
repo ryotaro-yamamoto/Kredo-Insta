@@ -16,6 +16,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () { //arei
     Route::get('/', [HomeController::class, 'index'])->name('index');//Ryotaro
+    Route::get('/suggestions', [HomeController::class, 'suggestions'])->name('suggestions.index');
     Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko
 
     //Admin
@@ -24,6 +25,7 @@ Route::group(['middleware' => 'auth'], function () { //arei
         Route::get('/users', [UsersController::class, 'index'])->name('users');
         Route::delete('/users/{id}/deactivate', [UsersController::class, 'deactivate'])->name('users.deactivate');
         Route::patch('/users/{id}/activate', [UsersController::class, 'activate'])->name('users.activate');
+        
 
         //Posts
         Route::get('/posts', [PostsController::class, 'index'])->name('posts');
@@ -54,9 +56,10 @@ Route::group(['middleware' => 'auth'], function () { //arei
     //Profile
     Route::get('/profile/{id}/show', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');//if-elseしてるからidはいらないらしい（header.blade.php L15）
-    Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/{id}/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/{id}/following', [ProfileController::class, 'following'])->name('profile.following');
     Route::get('/profile/{id}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
+
 
     //Likes
     Route::post('/like/{post_id}/store', [LikeController::class, 'store'])->name('like.store');

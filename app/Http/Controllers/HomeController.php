@@ -56,11 +56,24 @@ class HomeController extends Controller
                 $suggested_users[] = $user;
             }
         }
-        return $suggested_users;
+        return collect($suggested_users)->take($limit = 5);
     }
 
     public function search(Request $request){
-        $users = $this->user->where('name', 'like', '%' . $request->search . '%')->get();
+        $users = $this->user->where('name', 'like', '%' . $request->search . '%')->where('id', '!=', auth()->id())->get();
         return view('users.search')->with('users', $users)->with('search', $request->search);
+    }
+
+    public function suggestions(){
+        $all_users = $this->user->all()->except(Auth::user()->id);
+        $suggested_users = [];
+    
+        foreach ($all_users as $user) {
+            if(!$user->isFollowed()){
+                $suggested_users[] = $user;
+            }
+        }
+    
+        return view('users.modals.suggestions')->with('suggested_users', collect($suggested_users));
     }
 }
