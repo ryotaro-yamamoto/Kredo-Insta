@@ -63,4 +63,33 @@ class HomeController extends Controller
         $users = $this->user->where('name', 'like', '%' . $request->search . '%')->get();
         return view('users.search')->with('users', $users)->with('search', $request->search);
     }
+
+    public function searchPosts(Request $request){
+        $search = $request->search_posts;
+        $query = Post::query();
+
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                // Post ID
+                $q->where('id', 'like', "%{$search}%")
+                  // Category name (through categoryPost -> category)
+                  ->orWhereHas('categoryPost', function($q2) use ($search) {
+                      $q2->whereHas('category', function($q3) use ($search) {
+                          $q3->where('name', 'like', "%{$search}%");
+                      });
+                  })
+                  // User name
+                  ->orWhereHas('user', function($q4) use ($search) {
+                      $q4->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $all_posts = $query->with(['categoryPost.category', 'user'])
+                           ->orderByDesc('created_at')
+                           ->paginate(5)
+                           ->appends(['search_posts' => $search]);
+    
+        return view('admin.posts.search', compact('all_posts', 'search'));
+    }
 }
