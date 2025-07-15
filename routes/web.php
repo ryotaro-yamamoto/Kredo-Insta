@@ -16,7 +16,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () { //arei
     Route::get('/', [HomeController::class, 'index'])->name('index');//Ryotaro
-    Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko Riko2
+    Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko Riko2 Riko3
 
     //Admin
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
