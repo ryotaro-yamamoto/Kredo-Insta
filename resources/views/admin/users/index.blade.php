@@ -3,6 +3,16 @@
 @section('title', 'Admin: Users')
 
 @section('content')
+  <ul class="navbar-nav ms-auto mb-3">
+    <form action="{{route('admin.users')}}" style="width: 300px">
+      <input type="search" name="search" class="form-control form-control-sm" placeholder="Search...">
+    </form>
+  </ul>
+
+  @if(request('search'))
+    <p class="mb-3 text-muted">Search results for: <strong>{{ request('search') }}</strong></p>
+  @endif
+
   <table class="table table-hover align-middle bg-white border text-secondary">
     <thead class="small table-success text-secondary">
       <tr>
