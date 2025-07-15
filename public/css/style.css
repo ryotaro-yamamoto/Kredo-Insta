@@ -1,0 +1,68 @@
+/*
+navbar icons
+title.blade
+posts/show.blade
+suggestions
+following/followers
+*/
+
+.icon-sm{
+  font-size: 2rem;
+}
+
+.image-lg{
+  width: 9rem;
+  height: 9rem;
+  object-fit: cover;
+}
+
+/* like button */
+.fa-heart{
+  font-size: 1.5rem;
+}
+
+/* dates */
+.xsmall{
+  font-size: 0.65rem;
+}
+
+/* large */
+.icon-lg{
+  font-size: 9rem;
+}
+
+/* Profile page grid image */
+.grid-img{
+  width: 100%;
+  height: 300px;
+  /* height is not dynamic, optimized for widescreen */
+  object-fit: cover;
+}
+
+.avatar-lg{
+  width: 9rem;
+  height: 9rem;
+  object-fit: cover;
+}
+
+.avatar-sm{
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+}
+
+.icon-md{
+  font-size: 3.5rem;
+}
+
+.avatar-md{
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: cover;
+}
+
+.image-md{
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+}
