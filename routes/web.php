@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function () { //arei
+Route::group(['middleware' => 'auth'], function () { //AREI
     Route::get('/', [HomeController::class, 'index'])->name('index');//Ryotaro
     Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko Riko2 Riko3
 
