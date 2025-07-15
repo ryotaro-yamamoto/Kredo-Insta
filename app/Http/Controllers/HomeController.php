@@ -47,6 +47,7 @@ class HomeController extends Controller
         return $home_posts;
     }
 
+     //New(RIKO)//
     public function getSuggestedUser(){
         $all_users = $this->user->all()->except(Auth::user()->id);
         $suggested_users = [];
@@ -59,11 +60,13 @@ class HomeController extends Controller
         return collect($suggested_users)->take($limit = 5);
     }
 
+     //New(RIKO)//
     public function search(Request $request){
         $users = $this->user->where('name', 'like', '%' . $request->search . '%')->where('id', '!=', auth()->id())->get();
         return view('users.search')->with('users', $users)->with('search', $request->search);
     }
 
+     //New(RIKO)//
     public function suggestions(){
         $all_users = $this->user->all()->except(Auth::user()->id);
         $suggested_users = [];

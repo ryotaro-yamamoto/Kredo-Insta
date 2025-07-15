@@ -28,6 +28,7 @@ class ProfileController extends Controller
         return view('users.profile.edit')->with('user', $user);
     }
 
+    //New(RIKO)//
     public function update(Request $request,$id){
         $user = User::findOrFail($id);
         // Validate the request

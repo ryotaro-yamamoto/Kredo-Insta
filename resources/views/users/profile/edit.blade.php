@@ -60,7 +60,7 @@
     @enderror
       </div>
 
-      {{-- password --}}
+      {{-- password --}}{{-- New(RIKO) --}}
       <hr class="my-4">
 
       <h2 class="h5 mb-3 fw-light text-muted">Change Password</h2>

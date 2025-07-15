@@ -37,7 +37,7 @@
                 <p class="text-muted mb-0">{{Auth::user()->email}}</p>
             </div>
         </div>
-        {{-- suggestions --}}
+        {{-- suggestions --}}{{-- New(RIKO) --}}
         @if ($suggested_users)
             <div class="row">
                 <div class="col-auto">

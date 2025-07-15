@@ -1,3 +1,4 @@
+{{-- New(RIKO) --}}
 @extends('layouts.app')
 
 @section('title', 'All Suggestions')
