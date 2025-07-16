@@ -66,17 +66,38 @@ class HomeController extends Controller
         return view('users.search')->with('users', $users)->with('search', $request->search);
     }
 
-     //New(RIKO)//
-    public function suggestions(){
-        $all_users = $this->user->all()->except(Auth::user()->id);
-        $suggested_users = [];
-    
-        foreach ($all_users as $user) {
-            if(!$user->isFollowed()){
-                $suggested_users[] = $user;
+    public function searchPosts(Request $request){
+        $search = $request->search_posts;
+        $query = Post::query();
+
+        $isUncategorized = strtolower(trim($search)) === 'uncategorized';
+
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                // Post ID
+                $q->where('id', 'like', "%{$search}%")
+                // Category name (through categoryPost -> category)
+                ->orWhereHas('categoryPost', function($q2) use ($search) {
+                    $q2->whereHas('category', function($q3) use ($search) {
+                        $q3->where('name', 'like', "%{$search}%");
+                    });
+                })
+                  // User name
+                ->orWhereHas('user', function($q4) use ($search) {
+                    $q4->where('name', 'like', "%{$search}%");
+                });
+
+            });
+            if (stripos('uncategorized', $search) !== false || stripos($search, 'uncategorized') !== false) {
+                $query->orWhereDoesntHave('categoryPost');
             }
         }
+
+        $all_posts = $query->with(['categoryPost.category', 'user'])
+                           ->orderByDesc('created_at')
+                           ->paginate(5)
+                           ->appends(['search_posts' => $search]);
     
-        return view('users.modals.suggestions')->with('suggested_users', collect($suggested_users));
+        return view('admin.posts.search', compact('all_posts', 'search'));
     }
 }

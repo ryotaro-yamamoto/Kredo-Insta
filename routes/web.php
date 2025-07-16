@@ -14,10 +14,9 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function () { 
-    Route::get('/', [HomeController::class, 'index'])->name('index');
-    Route::get('/suggestions', [HomeController::class, 'suggestions'])->name('suggestions.index');//NEW(RIKO)
-    Route::get('/people', [HomeController::class, 'search'])->name('search');
+Route::group(['middleware' => 'auth'], function () { //arei
+    Route::get('/', [HomeController::class, 'index'])->name('index');//Ryotaro
+    Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko
 
     //Admin
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
@@ -25,12 +24,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/users', [UsersController::class, 'index'])->name('users');
         Route::delete('/users/{id}/deactivate', [UsersController::class, 'deactivate'])->name('users.deactivate');
         Route::patch('/users/{id}/activate', [UsersController::class, 'activate'])->name('users.activate');
-        
 
         //Posts
         Route::get('/posts', [PostsController::class, 'index'])->name('posts');
         Route::delete('/posts/{id}/invisible', [PostsController::class, 'invisible'])->name('posts.invisible');
         Route::patch('/posts/{id}/visible', [PostsController::class, 'visible'])->name('posts.visible');
+        Route::get('/posts/search', [HomeController::class, 'searchPosts'])->name('search.posts');
 
         //Categories
         Route::get('/categories', [CategoriesController::class, 'index'])->name('categories');
