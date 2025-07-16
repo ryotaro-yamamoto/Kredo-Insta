@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function () { //arei
-    Route::get('/', [HomeController::class, 'index'])->name('index');//Ryotaro
-    Route::get('/suggestions', [HomeController::class, 'suggestions'])->name('suggestions.index');
-    Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko
+Route::group(['middleware' => 'auth'], function () { 
+    Route::get('/', [HomeController::class, 'index'])->name('index');
+    Route::get('/suggestions', [HomeController::class, 'suggestions'])->name('suggestions.index');//NEW(RIKO)
+    Route::get('/people', [HomeController::class, 'search'])->name('search');
 
     //Admin
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
