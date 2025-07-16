@@ -60,9 +60,21 @@ class HomeController extends Controller
         return collect($suggested_users)->take($limit = 5);
     }
 
+    //New(RIKO)//
+    public function suggestions(){
+        $all_users = $this->user->all()->except(Auth::user()->id);
+        $suggested_users = [];
+        foreach ($all_users as $user) {
+            if(!$user->isFollowed()){
+                $suggested_users[] = $user;
+            }
+        }
+        return view('users.modals.suggestions')->with('suggested_users', collect($suggested_users));
+    }
+
      //New(RIKO)//
     public function search(Request $request){
-        $users = $this->user->where('name', 'like', '%' . $request->search . '%')->where('id', '!=', auth()->id())->get();
+        $users = $this->user->where('name', 'like', '%' . $request->search . '%')->where('id', '!=', Auth::user()->id)->get();
         return view('users.search')->with('users', $users)->with('search', $request->search);
     }
 
