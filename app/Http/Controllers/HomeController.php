@@ -68,21 +68,27 @@ class HomeController extends Controller
         $search = $request->search_posts;
         $query = Post::query();
 
+        $isUncategorized = strtolower(trim($search)) === 'uncategorized';
+
         if (!empty($search)) {
             $query->where(function($q) use ($search) {
                 // Post ID
                 $q->where('id', 'like', "%{$search}%")
-                  // Category name (through categoryPost -> category)
-                  ->orWhereHas('categoryPost', function($q2) use ($search) {
-                      $q2->whereHas('category', function($q3) use ($search) {
-                          $q3->where('name', 'like', "%{$search}%");
-                      });
-                  })
+                // Category name (through categoryPost -> category)
+                ->orWhereHas('categoryPost', function($q2) use ($search) {
+                    $q2->whereHas('category', function($q3) use ($search) {
+                        $q3->where('name', 'like', "%{$search}%");
+                    });
+                })
                   // User name
-                  ->orWhereHas('user', function($q4) use ($search) {
-                      $q4->where('name', 'like', "%{$search}%");
-                  });
+                ->orWhereHas('user', function($q4) use ($search) {
+                    $q4->where('name', 'like', "%{$search}%");
+                });
+
             });
+            if (stripos('uncategorized', $search) !== false || stripos($search, 'uncategorized') !== false) {
+                $query->orWhereDoesntHave('categoryPost');
+            }
         }
 
         $all_posts = $query->with(['categoryPost.category', 'user'])

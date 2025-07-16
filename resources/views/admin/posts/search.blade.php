@@ -4,6 +4,11 @@
 
 @section('content')
 @if(!($all_posts->isEmpty()))
+<div class="row justify-content-center">
+  <p class="h5 text-muted mb-4">
+    Search results for "<span class="fw-bold">{{$search}}</span>"
+  </p>
+</div>
   <table class="table table-hover align-middle bg-white border text-secondary">
     <thead class="small table-primary text-secondary">
       <tr>

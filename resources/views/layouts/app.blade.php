@@ -39,7 +39,7 @@
                                     <input type="search" name="search" class="form-control form-control-sm" placeholder="Search...">
                                 </form>
                              </ul>
-                         @else
+                         @elseif(request()->is('admin/posts'))
                             <ul class="navbar-nav ms-auto">
                                 <form action="{{route('admin.search.posts')}}" style="width: 300px">
                                     <input type="search" name="search_posts" class="form-control form-control-sm" placeholder="Admin Search...">
