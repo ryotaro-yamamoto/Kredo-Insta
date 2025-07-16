@@ -34,7 +34,9 @@
           <td>{{ $category->name }}</td>
           <td>
             @if ($category->posts_count > 0)
-              <span class="text-primary">{{$category->posts_count}}</span>
+              <a href="{{ route('admin.categories.posts', $category->id) }}" class="text-decoration-none text-primary">
+                {{ $category->posts_count }}
+              </a>
             @else
               {{$category->posts_count}}
             @endif
