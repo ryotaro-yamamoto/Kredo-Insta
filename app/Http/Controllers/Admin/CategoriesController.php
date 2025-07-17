@@ -58,4 +58,11 @@ class CategoriesController extends Controller{
         $this->category->findOrFail($id)->delete();
         return redirect()->back();
     }
+
+    public function posts($id){
+        $category = $this->category->findOrFail($id); 
+        $posts = $category->posts()->with(['user', 'categories'])->latest()->paginate(5); 
+
+        return view('admin.categories.posts', compact('category', 'posts'));
+    }
 }

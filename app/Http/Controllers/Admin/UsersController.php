@@ -13,9 +13,16 @@ class UsersController extends Controller{
         $this->user = $user;
     }
 
-    public function index(){
-        $all_users = $this->user->withTrashed()->latest()->paginate(5);
-        return view('admin.users.index')->with('all_users', $all_users);
+    public function index(Request $request){
+        $search = $request->input('search');
+
+        $all_users = User::withTrashed()
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->paginate(5);
+
+        return view('admin.users.index', compact('all_users'));
     }
 
     public function deactivate($id){
