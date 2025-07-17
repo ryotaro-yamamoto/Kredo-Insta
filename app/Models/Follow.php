@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Follow extends Model
 {
     public $timestamps = false;
+    protected $primaryKey = ['follower_id', 'following_id'];
+    public $incrementing = false;
 
     // To get the info of a follower
     public function follower(){

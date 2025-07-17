@@ -16,7 +16,8 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () { //AREI
     Route::get('/', [HomeController::class, 'index'])->name('index');//Ryotaro
-    Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko Riko2 Riko3
+    Route::get('/suggestions', [HomeController::class, 'suggestions'])->name('suggestions.index');
+    Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko
 
     //Admin
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
@@ -29,6 +30,7 @@ Route::group(['middleware' => 'auth'], function () { //AREI
         Route::get('/posts', [PostsController::class, 'index'])->name('posts');
         Route::delete('/posts/{id}/invisible', [PostsController::class, 'invisible'])->name('posts.invisible');
         Route::patch('/posts/{id}/visible', [PostsController::class, 'visible'])->name('posts.visible');
+        Route::get('/posts/search', [HomeController::class, 'searchPosts'])->name('search.posts');
 
         //Categories
         Route::get('/categories', [CategoriesController::class, 'index'])->name('categories');
@@ -54,9 +56,10 @@ Route::group(['middleware' => 'auth'], function () { //AREI
     //Profile
     Route::get('/profile/{id}/show', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');//if-elseしてるからidはいらないらしい（header.blade.php L15）
-    Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/{id}/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/{id}/following', [ProfileController::class, 'following'])->name('profile.following');
     Route::get('/profile/{id}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
+
 
     //Likes
     Route::post('/like/{post_id}/store', [LikeController::class, 'store'])->name('like.store');

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class CategoryPost extends Model
 {
     protected $table = 'category_post';// Define the pivot table name
+    protected $primaryKey = ['post_id', 'category_id'];
+    public $incrementing = false;
 
     protected $fillable = [
         'category_id',
@@ -17,5 +19,9 @@ class CategoryPost extends Model
 
     public function category(){
         return $this->belongsTo(Category::class);
+    }
+
+    public function post(){
+        return $this->belongsTo(Post::class);
     }
 }

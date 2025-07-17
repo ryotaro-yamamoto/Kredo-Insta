@@ -37,14 +37,14 @@
                 <p class="text-muted mb-0">{{Auth::user()->email}}</p>
             </div>
         </div>
-        {{-- suggestions --}}
+        {{-- suggestions --}}{{-- New(RIKO) --}}
         @if ($suggested_users)
             <div class="row">
                 <div class="col-auto">
                     <p class="fw-bold text-secondary">Suggestions For You</p>
                 </div>
                 <div class="col text-end">
-                    <a href="" class="fw-bold text-dark text-decoration-none">See All</a>
+                    <a href="{{ route('suggestions.index') }}" class="fw-bold text-dark text-decoration-none">See All</a>
                 </div>
             </div>
             @foreach ($suggested_users as $user)
