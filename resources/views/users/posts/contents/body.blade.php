@@ -26,7 +26,7 @@
       @endif
     </div>
     <div class="col-auto px-0">
-      <span>{{$post->likes->count()}}</span>
+      <span class="fw-bold fs-5">{{$post->likes->count()}}</span>
     </div>
     <div class="col text-end">
       @if ($post->categoryPost->isEmpty())

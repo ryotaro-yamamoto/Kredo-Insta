@@ -24,14 +24,14 @@
               <div class="col-auto">
                 <a href="{{route('profile.show', $post->user->id)}}">
                   @if ($post->user->avatar)
-                      <img src="{{$post->user->avatar}}" alt="{{$post->user->name}}" class="rounded-circle avatar-sm">
+                      <img src="{{$post->user->avatar}}" alt="{{$post->user->name}}" class="rounded-circle avatar-sm border border-secondary border-opacity-25">
                   @else
                       <i class="fa-solid fa-circle-user text-secondary icon-sm"></i>
                   @endif
                 </a>
               </div>
               <div class="col ps-0">
-                <a href="{{route('profile.show', $post->user->id)}}" class="text-decoration-none text-dark">{{ $post->user->name }}</a>
+                <a href="{{route('profile.show', $post->user->id)}}" class="text-decoration-none text-dark fw-bold">{{ $post->user->name }}</a>
               </div>
               <div class="col-auto">
                 {{-- IF you are the owner, you can edit or delete --}}
@@ -93,7 +93,7 @@
                 @endif
               </div>
               <div class="col-auto px-0">
-                <span>{{$post->likes->count()}}</span>
+                <span class="fw-bold fs-5">{{$post->likes->count()}}</span>
               </div>
               <div class="col text-end">
                 @if ($post->categoryPost->isEmpty())
@@ -125,7 +125,7 @@
                 <div class="input-group">
                   <textarea name="comment_body{{$post->id}}" cols="30" rows="1" class="textarea form-control form-control-sm" placeholder="Add a comment...">{{old('comment_body'. $post->id)}}</textarea>
                   <button type="submit" class="btn btn-outline-secondary btn-sm" title="Post">
-                    <i class="fa-regular fa-paper-plane"></i>
+                    <i class="fa-regular fa-paper-plane text-primary"></i>
                   </button>
                 </div>
                 {{-- error --}}

@@ -46,8 +46,8 @@ following/followers
 }
 
 .avatar-sm{
-  width: 2rem;
-  height: 2rem;
+  width: 2.2rem;
+  height: 2.2rem;
   object-fit: cover;
 }
 
@@ -65,4 +65,15 @@ following/followers
   width: 5rem;
   height: 5rem;
   object-fit: cover;
+}
+
+.fancy-font {
+  font-family: 'Dancing Script', cursive;
+}
+
+.custom-position {
+    margin: 0;
+    position: absolute;
+    top: 0px;     
+    left: 50px;
 }

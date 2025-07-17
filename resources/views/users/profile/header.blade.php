@@ -34,24 +34,24 @@
       <div class="col-auto">
         <a href="{{route('profile.show', $user->id)}}" class="text-decoration-none text-dark">
           @if ($user->posts->count() === 1)
-            <strong>{{ $user->posts->count() }}</strong> post
+            <strong class="fs-5">{{ $user->posts->count() }}</strong> post
           @else
-            <strong>{{ $user->posts->count() }}</strong> posts
+            <strong class="fs-5">{{ $user->posts->count() }}</strong> posts
           @endif
         </a>
       </div>
       <div class="col-auto">
         <a href="{{route('profile.followers', $user->id)}}" class="text-decoration-none text-dark">
           @if ($user->followers->count() === 1)
-            <strong>{{$user->followers->count()}}</strong> follower
+            <strong class="fs-5">{{$user->followers->count()}}</strong> follower
           @else
-            <strong>{{$user->followers->count()}}</strong> followers
+            <strong class="fs-5">{{$user->followers->count()}}</strong> followers
           @endif
         </a>
       </div>
       <div class="col-auto">
         <a href="{{route('profile.following', $user->id)}}" class="text-decoration-none text-dark">
-          <strong>{{$user->following->count()}}</strong> following
+          <strong class="fs-5">{{$user->following->count()}}</strong> following
         </a>
       </div>
     </div>

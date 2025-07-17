@@ -11,6 +11,7 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -23,7 +24,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <h1 class="h5 mb-0">{{ config('app.name') }}</h1>
+                    <h1 class="h2 mb-0 fw-bold fancy-font">{{ config('app.name') }}</h1>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -32,14 +33,17 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                      <!-- [SOON] Search bar here. -->
-                     @auth
-                         @if (!request()->is('admin/*')){{-- admin pageには表示しない --}}
-                             <ul class="navbar-nav ms-auto">
-                                <form action="{{route('search')}}" style="width: 300px">
-                                    <input type="search" name="search" class="form-control form-control-sm" placeholder="Search...">
+                     @auth                             
+                         @if(request()->is('admin/users'))
+                            <ul class="navbar-nav ms-auto">
+                                <form action="{{route('admin.search.users')}}" style="width: 300px">
+                                    <input type="search" name="search_users" class="form-control form-control-sm" placeholder="Admin Search...">
                                 </form>
-                             </ul>
-                         @elseif(request()->is('admin/posts'))
+                            </ul>
+                         @endif
+                     @endauth
+                     @auth                             
+                         @if(request()->is('admin/posts'))
                             <ul class="navbar-nav ms-auto">
                                 <form action="{{route('admin.search.posts')}}" style="width: 300px">
                                     <input type="search" name="search_posts" class="form-control form-control-sm" placeholder="Admin Search...">
@@ -67,6 +71,12 @@
                                 </li>
                             @endif
                         @else
+                            <!-- Search -->
+                            <li class="nav-item" title="Search">
+                                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal">
+                                    <i class="fa-solid fa-magnifying-glass text-dark icon-sm"></i>
+                                </a>
+                            </li>
                             <!-- Home -->
                             <li class="nav-item" title="Home">
                                 <a href="{{ route('index') }}" class="nav-link"><i class="fa-solid fa-house text-dark icon-sm"></i></a>
@@ -79,7 +89,7 @@
                             <li class="nav-item dropdown">
                                 <button id="account-dropdown" class="btn shadow-none nav-link" data-bs-toggle="dropdown">
                                     @if(Auth::user()->avatar)
-                                        <img src="{{Auth::user()->avatar}}" alt="{{ Auth::user()->name }}" class="rounded-circle avatar-sm">
+                                        <img src="{{Auth::user()->avatar}}" alt="{{ Auth::user()->name }}" class="rounded-circle avatar-sm border border-secondary border-opacity-25">
                                     @else
                                         <i class="fa-solid fa-circle-user text-dark icon-sm"></i>
                                     @endif
@@ -145,6 +155,26 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog custom-position">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Users</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('search') }}" method="GET">
+                    <div class="modal-body">
+                        <input type="search" name="search" class="form-control" placeholder="Search for users..." autofocus>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </body>
 </html>

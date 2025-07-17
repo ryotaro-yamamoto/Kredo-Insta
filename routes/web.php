@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function () { //AREI
-    Route::get('/', [HomeController::class, 'index'])->name('index');//Ryotaro
+Route::group(['middleware' => 'auth'], function () { 
+    Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/suggestions', [HomeController::class, 'suggestions'])->name('suggestions.index');
-    Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko
+    Route::get('/people', [HomeController::class, 'search'])->name('search');
 
     //Admin
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'], function () { //AREI
         Route::get('/users', [UsersController::class, 'index'])->name('users');
         Route::delete('/users/{id}/deactivate', [UsersController::class, 'deactivate'])->name('users.deactivate');
         Route::patch('/users/{id}/activate', [UsersController::class, 'activate'])->name('users.activate');
+        Route::get('/users/search', [HomeController::class, 'searchUsers'])->name('search.users');
 
         //Posts
         Route::get('/posts', [PostsController::class, 'index'])->name('posts');
@@ -68,6 +69,4 @@ Route::group(['middleware' => 'auth'], function () { //AREI
     //Follows
     Route::post('/follow/{user_id}/store', [FollowController::class, 'store'])->name('follow.store');
     Route::delete('/follow/{user_id}/destroy', [FollowController::class, 'destroy'])->name('follow.destroy');
-
-
 });
