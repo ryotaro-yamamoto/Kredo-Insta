@@ -167,7 +167,7 @@
                 </div>
                 <form action="{{ route('search') }}" method="GET">
                     <div class="modal-body">
-                        <input type="search" name="search" class="form-control" placeholder="Search for users..." autofocus>
+                        <input type="search" name="search" class="form-control" placeholder="Search for users...">
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Search</button>
@@ -176,5 +176,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        //Modal用のautofocus
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchModal = document.getElementById('searchModal');
+            searchModal.addEventListener('shown.bs.modal', function () {
+                const input = searchModal.querySelector('input[name="search"]');
+                if (input) {
+                    input.focus();
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
