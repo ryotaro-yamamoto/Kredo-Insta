@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,20 +28,38 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(){
-        $home_posts = $this->getHomePosts();
+    public function index(Request $request){
+        $categoryIds = $request->input('categories', []);
+        $home_posts = $this->getHomePosts($categoryIds);
         $suggested_users = $this->getSuggestedUser();
+        $categories = Category::all();
+
         return view('users.home')
                 ->with('home_posts', $home_posts)
-                ->with('suggested_users', $suggested_users);
+                ->with('suggested_users', $suggested_users)
+                ->with('categories', $categories)
+                ->with('categoryIds', $categoryIds);
     }
 
-    public function getHomePosts(){
+    public function getHomePosts($categoryIds = []){
         $all_posts = $this->post->latest()->get();
         $home_posts = [];
 
         foreach ($all_posts as $post) {
-            if($post->user->isFollowed() || $post->user->id === Auth::user()->id){
+            $isMyPostOrFollowed = $post->user->isFollowed() || $post->user->id === Auth::id();
+
+            if (!$isMyPostOrFollowed) {
+                continue;
+            }
+
+            if (empty($categoryIds)) {
+                $home_posts[] = $post;
+                continue;
+            }
+
+            $postCategoryIds = $post->categoryPost->pluck('category_id')->toArray();
+
+            if (!empty(array_intersect($postCategoryIds, $categoryIds))) {
                 $home_posts[] = $post;
             }
         }

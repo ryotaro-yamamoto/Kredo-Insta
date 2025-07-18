@@ -59,16 +59,18 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                            @if (!request()->is('login') && !request()->is('register'))
+                                @if (Route::has('login'))
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    </li>
+                                @endif
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
+                                @if (Route::has('register'))
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    </li>
+                                @endif
                             @endif
                         @else
                             <!-- Search -->
@@ -147,6 +149,27 @@
                                 </a>
                             </div>
                         </div>
+                    @else
+                        @if (isset($categories))
+                            <div class="col-3">
+                                <div class="position-sticky" style="top: 80px;">
+                                    <div class="card shadow-sm p-3 w-75">
+                                        <form method="GET" action="{{ route('index') }}">
+                                            <h5 class="mb-3 fw-bold">Filter by Category</h5>
+                                            @foreach ($categories as $category)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="categories[]" value="{{ $category->id }}" id="category{{ $category->id }}" {{ in_array($category->id, $categoryIds) ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="category{{ $category->id }}">
+                                                        {{ $category->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                            <button type="submit" class="btn btn-sm btn-primary mt-2 w-100 fw-bold">Filter</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     @endif
 
                     <div class="col-9">

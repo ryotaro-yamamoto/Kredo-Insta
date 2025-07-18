@@ -77,3 +77,7 @@ following/followers
     top: 0px;     
     left: 50px;
 }
+
+.container {
+    overflow: visible !important;
+}
