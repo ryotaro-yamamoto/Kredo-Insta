@@ -26,6 +26,13 @@
                 </div>
             @endif
         @endforelse
+
+        <div id="backToTopContainer" class="text-end mt-5" style="display: none;">
+            <button onclick="scrollToTop()" class="btn btn-outline-secondary fw-bold p-2">
+                ↑ Back to Top
+            </button>
+        </div>
+
     </div>
     <div class="col-4">
         <div class="row align-items-center mb-5 bg-white shadow-sm rounded-3 py-3">
@@ -81,3 +88,21 @@
     </div>
 </div>
 @endsection
+
+<script>
+    window.addEventListener('scroll', function () {
+        const backToTop = document.getElementById('backToTopContainer');
+        const scrollY = window.scrollY;
+        const fullHeight = document.body.scrollHeight - window.innerHeight;
+
+        if (scrollY >= fullHeight - 50) {
+            backToTop.style.display = 'block';
+        } else {
+            backToTop.style.display = 'none';
+        }
+    });
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
