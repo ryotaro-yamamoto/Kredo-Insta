@@ -21,36 +21,36 @@ class CommentSection extends Component
     public function mount(Post $post)
     {
         $this->post = $post;
-        $this->comments = $post->comments()->latest()->get();
+        $this->loadComments();
     }
 
     public function render()
     {
-        $this->comments = Comment::where('post_id', $this->post->id)
-        ->orderBy('created_at', 'asc') 
-        ->get();
         return view('livewire.comment-section');
     }
 
     public function toggleShowAll($value)
     {
         $this->showAll = $value;
+        $this->loadComments();
     }
 
     public function addComment()
     {
         $this->validate();
 
-        $comment = Comment::create([
-            'body' => $this->newComment,
-            'user_id' => Auth::id(),
+        Comment::create([
             'post_id' => $this->post->id,
+            'user_id' => Auth::id(),
+            'body' => $this->newComment,
         ]);
 
         $this->newComment = '';
-        $this->comments->prepend($comment);
+        $this->showAll = true;
+        $this->loadComments();
 
-        $this->dispatch('commentAdded');
+        $newCount = $this->post->comments()->count();
+        $this->dispatch('commentCountUpdated', $this->post->id, $newCount);
     }
 
     public function deleteComment($commentId)
@@ -58,7 +58,13 @@ class CommentSection extends Component
         $comment = Comment::findOrFail($commentId);
         if ($comment->user_id === Auth::id()) {
             $comment->delete();
-            $this->comments = $this->post->comments()->latest()->get();
+            $this->loadComments();
         }
+    }
+
+    private function loadComments()
+    {
+        $query = $this->post->comments()->orderBy('created_at', 'asc');
+        $this->comments = $query->get();
     }
 }

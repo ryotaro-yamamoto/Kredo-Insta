@@ -10,7 +10,7 @@
                 {{-- title --}}
                 @include('users.posts.contents.title')
                 {{-- body --}}
-                @include('users.posts.contents.body')
+                <livewire:post-body :post="$post" :commentCount="$post->comments_count" />
             </div>
         @empty
             @if (request()->has('categories'))
