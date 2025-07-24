@@ -21,7 +21,7 @@
             @if ($user->avatar)
               <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="rounded-circle d-block mx-auto avatar-md">
             @else
-              <i class="fa-solid fa-circle-user text-secondary icon-md d-block mx-auto"></i>
+              <i class="fa-solid fa-circle-user text-secondary icon-md d-block mx-auto avatar-md"></i>
             @endif
           </td>
           <td>

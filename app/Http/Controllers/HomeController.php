@@ -57,29 +57,33 @@ class HomeController extends Controller
     }
     
 
-    public function getHomePosts($categoryIds = []){
+    public function getHomePosts($categoryIds = [])
+    {
         $all_posts = $this->post->withCount('comments')->latest()->get();
         $home_posts = [];
-
+    
         foreach ($all_posts as $post) {
             $isMyPostOrFollowed = $post->user->isFollowed() || $post->user->id === Auth::id();
-
+    
             if (!$isMyPostOrFollowed) {
                 continue;
             }
-
+    
             if (empty($categoryIds)) {
                 $home_posts[] = $post;
                 continue;
             }
-
+    
             $postCategoryIds = $post->categoryPost->pluck('category_id')->toArray();
-
+    
             if (!empty(array_intersect($postCategoryIds, $categoryIds))) {
-                return $home_posts;
+                $home_posts[] = $post; // ← ここを return じゃなく push に変える
             }
         }
+    
+        return collect($home_posts); // ← ✅ 最後に必ず return
     }
+    
 
     public function getSuggestedUser(){
         $all_users = $this->user->all()->except(Auth::user()->id);
