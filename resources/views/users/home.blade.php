@@ -20,12 +20,18 @@
                 @include('users.posts.contents.body')
             </div>
         @empty
-            {{-- If the site doesn't have any Posts --}}
-            <div class="text-center">
-                <h2>Share Photos</h2>
-                <p class="text-secondary">When you share photos, they'll appear on your profile.</p>
-                <a href="{{ route('post.create') }}" class="text-decoration-none">Share your first photo</a>
-            </div>
+            @if (request()->has('categories'))
+                <div class="text-center text-muted">
+                    <h4>No Posts Found</h4>
+                    <p>There are no posts in the selected category.</p>
+                </div>
+            @else
+                <div class="text-center">
+                    <h2>Share Photos</h2>
+                    <p class="text-secondary">When you share photos, they'll appear on your profile.</p>
+                    <a href="{{ route('post.create') }}" class="text-decoration-none">Share your first photo</a>
+                </div>
+            @endif
         @endforelse
     </div>
     <div class="col-4">

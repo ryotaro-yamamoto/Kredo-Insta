@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Story;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,11 +29,12 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(){
-        $home_posts = $this->getHomePosts();
+    public function index(Request $request){
+        $categoryIds = $request->input('categories', []);
+        $home_posts = $this->getHomePosts($categoryIds);
         $suggested_users = $this->getSuggestedUser();
-    
-        // ✅ フォローしているユーザーと自分の ID を取得
+        $categories = Category::all();
+
         $followed_user_ids = Auth::user()->following()->pluck('following_id')->toArray();
         $followed_user_ids[] = Auth::id(); // 自分自身も含める
     
@@ -49,23 +51,36 @@ class HomeController extends Controller
             ->with('home_posts', $home_posts)
             ->with('suggested_users', $suggested_users)
             ->with('stories', $stories)
-            ->with('groupedStories', $groupedStories);
+            ->with('groupedStories', $groupedStories)
+            ->with('categories', $categories)
+            ->with('categoryIds', $categoryIds);
     }
     
 
-    public function getHomePosts(){
+    public function getHomePosts($categoryIds = []){
         $all_posts = $this->post->latest()->get();
         $home_posts = [];
 
         foreach ($all_posts as $post) {
-            if($post->user->isFollowed() || $post->user->id === Auth::user()->id){
+            $isMyPostOrFollowed = $post->user->isFollowed() || $post->user->id === Auth::id();
+
+            if (!$isMyPostOrFollowed) {
+                continue;
+            }
+
+            if (empty($categoryIds)) {
                 $home_posts[] = $post;
+                continue;
+            }
+
+            $postCategoryIds = $post->categoryPost->pluck('category_id')->toArray();
+
+            if (!empty(array_intersect($postCategoryIds, $categoryIds))) {
+                return $home_posts;
             }
         }
-        return $home_posts;
     }
 
-     //New(RIKO)//
     public function getSuggestedUser(){
         $all_users = $this->user->all()->except(Auth::user()->id);
         $suggested_users = [];
