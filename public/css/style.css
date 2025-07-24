@@ -43,6 +43,11 @@ following/followers
   font-size: 1.5rem;
 }
 
+/* comment button */
+.fa-comment{
+  font-size: 1.5rem;
+}
+
 /* dates */
 .xsmall{
   font-size: 0.65rem;
@@ -102,6 +107,14 @@ following/followers
 
 .container {
   overflow: visible !important;
+}
+
+#backToTopContainer {
+  width: 100%;
+}
+
+#backToTopContainer.right {
+  text-align: right;
 }
 
 .story-item {

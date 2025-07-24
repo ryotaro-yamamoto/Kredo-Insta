@@ -9,4 +9,16 @@ class Like extends Model
     public $timestamps = false;
     protected $primaryKey = ['user_id', 'post_id'];
     public $incrementing = false;
+
+    protected $fillable = [
+        'user_id',
+        'post_id', 
+    ];
+
+    public function post(){
+        return $this->belongsTo(Post::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }
