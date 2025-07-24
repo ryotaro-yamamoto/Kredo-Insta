@@ -2,23 +2,27 @@
 
 namespace App\Livewire;
 
+use App\Models\Post;
 use Livewire\Component;
 
 class PostBody extends Component
 {
     public $post;
-    public $commentCount;
+    public int $comments_count;
+    protected $listeners = ['commentCountUpdated' => 'updateCommentCount'];
 
-    protected $listeners = ['commentAdded' => 'updateCommentCount'];
 
-    public function mount($post)
+    public function mount(Post $post)
     {
-        $this->commentCount = $post->comments->count();
+        $this->post = $post;
+        $this->comments_count = $post->comments()->count();
     }
 
-    public function updateCommentCount()
+    public function updateCommentCount($postId, $newCount)
     {
-        $this->commentCount = $this->post->comments()->count();
+        if ($this->post->id === $postId) {
+            $this->comments_count = $newCount;
+        }
     }
 
     public function render()

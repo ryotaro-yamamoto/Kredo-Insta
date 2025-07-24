@@ -58,7 +58,7 @@ class HomeController extends Controller
     
 
     public function getHomePosts($categoryIds = []){
-        $all_posts = $this->post->latest()->get();
+        $all_posts = $this->post->withCount('comments')->latest()->get();
         $home_posts = [];
 
         foreach ($all_posts as $post) {

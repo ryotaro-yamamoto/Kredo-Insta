@@ -17,7 +17,7 @@
                 {{-- title --}}
                 @include('users.posts.contents.title')
                 {{-- body --}}
-                @include('users.posts.contents.body')
+                <livewire:post-body :post="$post" :commentCount="$post->comments_count" />
             </div>
         @empty
             @if (request()->has('categories'))
@@ -98,23 +98,11 @@
 
 @section('scripts')
 <script>
-        window.addEventListener('scroll', function () {
-        const backToTop = document.getElementById('backToTopContainer');
-        const scrollY = window.scrollY;
-        const fullHeight = document.body.scrollHeight - window.innerHeight;
-
-        if (scrollY >= fullHeight - 50) {
-            backToTop.style.display = 'block';
-        } else {
-            backToTop.style.display = 'none';
-        }
-    });
-
     function scrollToTop() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    
+
     document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('.modal').forEach(modal => {
         const carousel = modal.querySelector('[id^=story-carousel-]');
