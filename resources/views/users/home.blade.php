@@ -33,7 +33,7 @@
             <div class="col-auto">
                 <a href="{{ route('profile.show', Auth::user()->id) }}">
                     @if (Auth::user()->avatar)
-                        <img src="{{ Auth::user()->avatar }}" alt="{{ Auth::user()->name }}" class="rounded-circle avatar-md">
+                        <img src="{{ Auth::user()->avatar }}" alt="{{ Auth::user()->name }}" class="rounded-circle avatar-md  border border-secondary border-opacity-25">
                     @else
                         <i class="fa-solid fa-circle-user text-secondary icon-md"></i>
                     @endif
@@ -48,7 +48,7 @@
         @if ($suggested_users)
             <div class="row">
                 <div class="col-auto">
-                    <p class="fw-bold text-secondary">Suggestions For You</p>
+                    <p class="fw-bold text-secondary fs-6">Suggestions For You</p>
                 </div>
                 <div class="col text-end">
                     <a href="{{ route('suggestions.index') }}" class="fw-bold text-dark text-decoration-none">See All</a>
@@ -66,7 +66,7 @@
                         </a>
                     </div>
                     <div class="col ps-0 text-truncate">
-                        <a href="{{route('profile.show', $user->id)}}" class="text-decoration-none text-dark fw-bold">
+                        <a href="{{route('profile.show', $user->id)}}" class="text-decoration-none text-dark fw-bold fs-6">
                             {{ $user->name }}
                         </a>
                     </div>

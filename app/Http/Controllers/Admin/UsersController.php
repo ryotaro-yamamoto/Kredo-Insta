@@ -22,7 +22,7 @@ class UsersController extends Controller{
             })
             ->paginate(5);
 
-        return view('admin.users.index', compact('all_users'));
+        return view('admin.users.index', compact('all_users', 'search'));
     }
 
     public function deactivate($id){

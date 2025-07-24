@@ -98,6 +98,19 @@ class HomeController extends Controller
         return view('users.search')->with('users', $users)->with('search', $request->search);
     }
 
+    public function searchUsers(Request $request)
+    {
+        $search = $request->search_users;
+
+        $all_users = User::where('id', '!=', Auth::id())
+            ->where('name', 'like', "%{$search}%")
+            ->paginate(10) 
+            ->appends(['search_users' => $search]);
+
+
+        return view('admin.users.search', compact('all_users', 'search'));
+    }
+
     public function searchPosts(Request $request){
         $search = $request->search_posts;
         $query = Post::query();
