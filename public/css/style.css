@@ -94,3 +94,9 @@ following/followers
 #backToTopContainer.right {
   text-align: right;
 }
+
+.carousel-wrapper {
+  height: 600px; 
+  overflow: hidden;
+}
+

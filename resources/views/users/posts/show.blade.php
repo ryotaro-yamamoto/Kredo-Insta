@@ -13,10 +13,50 @@
         top: 65px;
       }
     </style>
-    <div class="row border shadow">
-      <div class="col p-0 border-end">
-        <img src="{{$post->image}}" alt="post id {{$post->id}}" class="w-100">
+    <div class="row border shadow" style="height: 85vh;">
+      <div class="col-8 p-0">
+        @if ($post->images->isNotEmpty())
+          <div id="carousel-{{ $post->id }}" class="carousel slide h-100" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              @foreach ($post->images as $index => $image)
+                <button
+                  type="button"
+                  data-bs-target="#carousel-{{ $post->id }}"
+                  data-bs-slide-to="{{ $index }}"
+                  class="{{ $index === 0 ? 'active' : '' }}"
+                  aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+                  aria-label="Slide {{ $index + 1 }}"
+                  style="background-color: gray; width: 10px; height: 10px; border-radius: 50%;"
+                ></button>
+              @endforeach
+            </div>
+            <div class="carousel-inner h-100">
+              @foreach ($post->images->take(5) as $index => $image) {{-- 最大5枚まで --}}
+                <div class="carousel-item h-100 {{ $index === 0 ? 'active' : '' }}">
+                  <div class="d-flex align-items-center justify-content-center h-100 bg-white border">
+                    <img src="{{ asset('storage/' . $image->image_path) }}" class="d-block w-100 object-fit-contain" alt="Image {{ $index + 1 }}">
+                  </div>
+                </div>
+              @endforeach
+            </div>
+            @if ($post->images->count() > 1)
+              <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ $post->id }}" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: black;"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ $post->id }}" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: black;"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            @endif
+          </div>
+        @else
+          <div class="d-flex align-items-center justify-content-center h-100 bg-black border">
+            <img src="{{ asset('no-image.png') }}" class="d-block w-100 object-fit-contain" alt="no image">
+          </div>
+        @endif
       </div>
+
       <div class="col-4 px-0 bg-white">
         <div class="card border-0">
           <div class="card-header bg-white py-3">

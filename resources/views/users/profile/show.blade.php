@@ -11,8 +11,8 @@
       <div class="row">
         @foreach ($user->posts as $post)
           <div class="col-lg-4 col-md-6 mb-4">
-            <a href="{{route('post.show', $post->id)}}">
-              <img src="{{$post->image}}" alt="post id {{$post->id}}" class="grid-img">
+            <a href="{{ route('post.show', $post->id) }}">
+              <img src="{{ asset('storage/' . $post->images->first()->image_path) }}" class="grid-img" alt="post">
             </a>
           </div>
         @endforeach
