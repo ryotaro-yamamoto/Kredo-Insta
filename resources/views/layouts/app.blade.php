@@ -10,7 +10,7 @@
     <title>{{ config('app.name')}} | @yield('title')</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('images/Kredo_Insta.png') }}">
+    <link rel="icon" type="image/ico" href="{{ asset('images/favicon.ico') }}">
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -97,6 +97,14 @@
                             <li class="nav-item" title="Create Post">
                                 <a href="{{ route('post.create') }}" class="nav-link"><i class="fa-solid fa-pen-to-square text-dark icon-sm"></i></a>
                             </li>
+                            <!-- Message -->
+                            <li class="nav-item" title="Message">
+                                <a href="{{ route('messages.index', Auth::user()->id) }}" class="nav-link"><i class="fa-solid fa-message text-dark icon-sm"></i></a>
+                            </li>
+                            <!-- Mickey -->
+                            <li class="nav-item" title="Customer Support Mickey">
+                                <a href="{{ route('mickey') }}" class="nav-link"><i class="fa-solid fa-headset text-dark icon-sm"></i></a>
+                            </li>
                             <!-- Account -->
                             <li class="nav-item dropdown">
                                 <button id="account-dropdown" class="btn shadow-none nav-link" data-bs-toggle="dropdown">
@@ -156,6 +164,12 @@
                                 </a>
                                 <a href="{{route('admin.categories')}}" class="list-group-item {{request()->is('admin/categories') ? 'active' : ''}}">
                                     <i class="fa-solid fa-tags"></i> Categories
+                                </a>
+                                <a href="{{route('admin.advertises')}}" class="list-group-item {{request()->is('admin/advertises') ? 'active' : ''}}">
+                                    <i class="fa-solid fa-rectangle-ad"></i> Advertises
+                                </a>
+                                <a href="{{route('admin.interests')}}" class="list-group-item {{request()->is('admin/interests') ? 'active' : ''}}">
+                                    <i class="fa-solid fa-person-circle-plus"></i> Interests
                                 </a>
                             </div>
                         </div>
@@ -233,5 +247,6 @@
         });
     });
     </script>
+    @yield('scripts')
 </body>
 </html>

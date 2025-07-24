@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advertise;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Story;
@@ -31,7 +32,7 @@ class HomeController extends Controller
      */
     public function index(Request $request){
         $categoryIds = $request->input('categories', []);
-        $home_posts = $this->getHomePosts($categoryIds);
+        [$home_posts, $ads] = $this->getHomePosts($categoryIds);
         $suggested_users = $this->getSuggestedUser();
         $categories = Category::all();
 
@@ -51,39 +52,44 @@ class HomeController extends Controller
             ->with('home_posts', $home_posts)
             ->with('suggested_users', $suggested_users)
             ->with('stories', $stories)
+            ->with('ads', $ads)
             ->with('groupedStories', $groupedStories)
             ->with('categories', $categories)
             ->with('categoryIds', $categoryIds);
     }
-    
 
-    public function getHomePosts($categoryIds = [])
-    {
-        $all_posts = $this->post->withCount('comments')->latest()->get();
-        $home_posts = [];
-    
-        foreach ($all_posts as $post) {
-            $isMyPostOrFollowed = $post->user->isFollowed() || $post->user->id === Auth::id();
-    
+
+    public function getHomePosts($categoryIds = []){
+        $user = Auth::user();
+
+        // ユーザーの興味に基づいた広告取得
+        $ads = Advertise::whereHas('interests', function ($query) use ($user) {
+            $query->whereIn('interests.id', $user->interests->pluck('id'));
+        })->get();
+
+        // 投稿取得（コメント数も含む）
+        $all_posts = $this->post->with(['user', 'categoryPost'])->withCount('comments')->latest()->get();
+
+        // 投稿をフィルター
+        $home_posts = $all_posts->filter(function ($post) use ($user, $categoryIds) {
+            $isMyPostOrFollowed = $post->user->isFollowed() || $post->user->id === $user->id;
+
             if (!$isMyPostOrFollowed) {
-                continue;
+                return false;
             }
-    
+
             if (empty($categoryIds)) {
-                $home_posts[] = $post;
-                continue;
+                return true;
             }
-    
+
             $postCategoryIds = $post->categoryPost->pluck('category_id')->toArray();
-    
-            if (!empty(array_intersect($postCategoryIds, $categoryIds))) {
-                $home_posts[] = $post; // ← ここを return じゃなく push に変える
-            }
-        }
-    
-        return collect($home_posts); // ← ✅ 最後に必ず return
+            return !empty(array_intersect($postCategoryIds, $categoryIds));
+        });
+
+        return [$home_posts->values(), $ads]; // → コレクションのキーをリセットして返す
     }
-    
+
+
 
     public function getSuggestedUser(){
         $all_users = $this->user->all()->except(Auth::user()->id);

@@ -176,3 +176,9 @@ following/followers
   height: 600px;
   overflow: hidden;
 }
+
+.mickey{
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: cover;
+}

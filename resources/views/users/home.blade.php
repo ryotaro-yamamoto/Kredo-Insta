@@ -19,6 +19,22 @@
                 {{-- body --}}
                 <livewire:post-body :post="$post" :commentCount="$post->comments_count" />
             </div>
+
+            {{-- 投稿5件ごとに広告を表示 --}}
+            @if ($loop->iteration % 5 === 0 && floor($loop->iteration / 5) - 1 < count($ads))
+            <div class="card mb-4 border border-warning">
+                <div class="card-header bg-warning text-white fw-bold">
+                    Sponsored
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $ads[floor($loop->iteration / 5) - 1]->title }}</h5>
+                    <p class="card-text">{{ $ads[floor($loop->iteration / 5) - 1]->description }}</p>
+                    @if($ads[floor($loop->iteration / 5) - 1]->image)
+                        <img src="{{ $ads[floor($loop->iteration / 5) - 1]->image }}" alt="ad image" class="w-100">
+                    @endif
+                </div>
+            </div>
+        @endif
         @empty
             @if (request()->has('categories'))
                 <div class="text-center text-muted">
@@ -57,7 +73,7 @@
                 <p class="text-muted mb-0">{{Auth::user()->email}}</p>
             </div>
         </div>
-        {{-- suggestions --}}{{-- New(RIKO) --}}
+        {{-- suggestions --}}
         @if ($suggested_users)
             <div class="row">
                 <div class="col-auto">

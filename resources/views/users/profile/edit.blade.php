@@ -59,8 +59,18 @@
       <div class="text-danger small">{{ $message }}</div>
     @enderror
       </div>
+      <div>
+        <label>興味</label>
+        @foreach ($interests as $interest)
+            <div>
+                <input type="checkbox" name="interests[]" value="{{ $interest->id }}"
+                    {{ $user->interests->contains($interest->id) ? 'checked' : '' }}>
+                {{ $interest->name }}
+            </div>
+        @endforeach
+    </div>
 
-      {{-- password --}}{{-- New(RIKO) --}}
+      {{-- password --}}
       <hr class="my-4">
 
       <h2 class="h5 mb-3 fw-light text-muted">Change Password</h2>
