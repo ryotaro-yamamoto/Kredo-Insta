@@ -17,6 +17,10 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <!-- Bootstrap 5 JS Bundle (includes Popper) -->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
+
 </head>
 <body>
     <div id="app">
@@ -70,11 +74,11 @@
                             <!-- Home -->
                             <li class="nav-item" title="Home">
                                 <a href="{{ route('index') }}" class="nav-link"><i class="fa-solid fa-house text-dark icon-sm"></i></a>
-                            </i>
+                            </li>
                             <!-- Create post -->
                             <li class="nav-item" title="Create Post">
-                                <a href="{{ route('post.create') }}" class="nav-link"><i class="fa-solid fa-circle-plus text-dark icon-sm"></i></a>
-                            </i>
+                                <a href="{{ route('post.create') }}" class="nav-link"><i class="fa-solid fa-pen-to-square text-dark icon-sm"></i></a>
+                            </li>
                             <!-- Account -->
                             <li class="nav-item dropdown">
                                 <button id="account-dropdown" class="btn shadow-none nav-link" data-bs-toggle="dropdown">

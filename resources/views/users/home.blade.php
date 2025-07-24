@@ -5,6 +5,13 @@
 @section('content')
 <div class="row gx-5">
     <div class="col-8">
+        {{-- show stories modal --}}
+        @include('users.stories.modal')
+
+        {{-- Stories --}}
+        @include('users.stories.story')
+
+        {{-- Posts --}}
         @forelse ($home_posts as $post)
             <div class="card mb-4">
                 {{-- title --}}
@@ -74,4 +81,56 @@
         @endif
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.modal').forEach(modal => {
+        const carousel = modal.querySelector('[id^=story-carousel-]');
+        if (!carousel) return;
+  
+        const slides = carousel.querySelectorAll('.story-slide');
+        let currentIndex = 0;
+        const userId = carousel.dataset.userId;
+  
+        const showSlide = (index) => {
+          slides.forEach(slide => slide.classList.add('d-none'));
+          if (slides[index]) {
+            slides[index].classList.remove('d-none');
+          }
+        };
+  
+        modal.querySelector('.btn-prev-story').addEventListener('click', () => {
+          if (currentIndex > 0) {
+            currentIndex--;
+            showSlide(currentIndex);
+          }
+        });
+  
+        modal.querySelector('.btn-next-story').addEventListener('click', () => {
+          if (currentIndex < slides.length - 1) {
+            currentIndex++;
+            showSlide(currentIndex);
+          } else {
+            const nextModal = modal.nextElementSibling;
+            const bsModal = bootstrap.Modal.getInstance(modal);
+            bsModal.hide();
+  
+            if (nextModal && nextModal.classList.contains('modal')) {
+              const newModal = new bootstrap.Modal(nextModal);
+              newModal.show();
+            }
+          }
+        });
+  
+        // リセット
+        modal.addEventListener('shown.bs.modal', () => {
+          currentIndex = 0;
+          showSlide(currentIndex);
+        });
+      });
+    });
+  </script>
+  
 @endsection

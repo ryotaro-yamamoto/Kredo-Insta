@@ -9,15 +9,20 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function () { //AREI
-    Route::get('/', [HomeController::class, 'index'])->name('index');//Ryotaro
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/suggestions', [HomeController::class, 'suggestions'])->name('suggestions.index');
-    Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko
+    Route::get('/people', [HomeController::class, 'search'])->name('search');
+
+    // Stories
+    Route::post('/stories', [StoryController::class, 'store'])->name('stories.store');
+    Route::post('/stories/{story}/view', [StoryController::class, 'view']);
 
     //Admin
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {

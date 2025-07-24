@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Story;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,10 +31,27 @@ class HomeController extends Controller
     public function index(){
         $home_posts = $this->getHomePosts();
         $suggested_users = $this->getSuggestedUser();
+    
+        // ✅ フォローしているユーザーと自分の ID を取得
+        $followed_user_ids = Auth::user()->following()->pluck('following_id')->toArray();
+        $followed_user_ids[] = Auth::id(); // 自分自身も含める
+    
+        // ✅ フォローしている人と自分のストーリーのみ取得
+        $stories = Story::active()
+            ->whereIn('user_id', $followed_user_ids)
+            ->with(['user', 'views'])
+            ->latest()
+            ->get();
+    
+        $groupedStories = $stories->groupBy('user_id');
+    
         return view('users.home')
-                ->with('home_posts', $home_posts)
-                ->with('suggested_users', $suggested_users);
+            ->with('home_posts', $home_posts)
+            ->with('suggested_users', $suggested_users)
+            ->with('stories', $stories)
+            ->with('groupedStories', $groupedStories);
     }
+    
 
     public function getHomePosts(){
         $all_posts = $this->post->latest()->get();
@@ -51,6 +69,8 @@ class HomeController extends Controller
     public function getSuggestedUser(){
         $all_users = $this->user->all()->except(Auth::user()->id);
         $suggested_users = [];
+
+        
 
         foreach ($all_users as $user) {
             if(!$user->isFollowed()){

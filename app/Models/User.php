@@ -17,6 +17,8 @@ class User extends Authenticatable
     const ADMIN_ROLE_ID = 1;
     const USER_ROLE_ID = 2;
 
+    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -65,6 +67,11 @@ class User extends Authenticatable
     public function following(){
         return $this->hasMany(Follow::class, 'follower_id');
     }
+
+    public function followings(){
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
+    }
+
 
     public function isFollowed(){
         return $this->followers()->where('follower_id', Auth::user()->id)->exists();
