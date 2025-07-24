@@ -32,8 +32,7 @@
           <div class="text-danger small">{{ $message }}</div>
         @enderror
       </div>
-      
-  
+
       <div class="row">
         <div class="col">
           <label for="description" class="form-label"><b>Description</b></label>
@@ -48,19 +47,48 @@
         @enderror
       </div>
 
-      <div class="row mb-4">
-        <div class="col-6">
-          <label for="image" class="form-label"><b>Image</b></label>
-          <img src="{{$post->image}}" alt="post id {{$post->id}}" class="img-thumbnail w-100">
-          <input type="file" class="form-control mt-1" name="image" id="image" aria-describedby="image-info">
-          <div id="image" class="form-text">
-            The acceptable formats are jpeg, png, and gif only.<br>
-            Max file size is 1048kb.
+      @if ($post->images->count())
+        <div id="carousel-edit-{{ $post->id }}" class="carousel slide mb-3 w-50" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            @foreach ($post->images as $index => $image)
+              <button
+                type="button"
+                data-bs-target="#carousel-{{ $post->id }}"
+                data-bs-slide-to="{{ $index }}"
+                class="{{ $index === 0 ? 'active' : '' }}"
+                aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+                aria-label="Slide {{ $index + 1 }}"
+                style="background-color: gray; width: 10px; height: 10px; border-radius: 50%;"
+              ></button>
+            @endforeach
           </div>
-          @error('image')
-            <div class="text-danger small">{{ $message }}</div>
-          @enderror
+          <div class="carousel-inner" style="height:400px;">
+            @foreach ($post->images as $index => $image)
+              <div class="carousel-item h-100 {{ $index === 0 ? 'active' : '' }}">
+                <div class="d-flex align-items-center justify-content-center h-100 bg-white">
+                  <img src="{{ asset('storage/' . $image->image_path) }}" class="d-block w-100 object-fit-contain" alt="Image {{ $index + 1 }}">
+                </div>
+              </div>
+            @endforeach
+          </div>
+          @if ($post->images->count() > 1)
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-edit-{{ $post->id }}" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" style="background-color: black;"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel-edit-{{ $post->id }}" data-bs-slide="next">
+              <span class="carousel-control-next-icon" style="background-color: black;"></span>
+            </button>
+          @endif
         </div>
+        @endif
+
+      <div class="mb-3">
+        <div id="image-upload-wrapper">
+          <input type="file" name="images[]" class="form-control image-input mb-2 w-50" accept="image/*">
+        </div>
+        @error('images')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
       </div>
 
       <div class="row">
@@ -71,4 +99,44 @@
     </form>
   </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const maxImages = 5;
+    const wrapper = document.getElementById('image-upload-wrapper');
+    const previewWrapper = document.getElementById('image-preview-wrapper');
+
+    wrapper.addEventListener('change', function (e) {
+      if (!e.target.classList.contains('image-input')) return;
+
+      const files = e.target.files;
+      if (files.length > 0) {
+        // 画像プレビューを追加
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'img-thumbnail mb-2';
+          img.style.maxWidth = '300px';
+          previewWrapper.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+
+        // 入力欄が5未満なら次のinputを追加
+        const currentInputs = wrapper.querySelectorAll('.image-input');
+        if (currentInputs.length < maxImages) {
+          const newInput = document.createElement('input');
+          newInput.type = 'file';
+          newInput.name = 'images[]';
+          newInput.className = 'form-control image-input mb-2';
+          newInput.accept = 'image/*';
+          wrapper.appendChild(newInput);
+        }
+      }
+    });
+  });
+</script>
 @endsection

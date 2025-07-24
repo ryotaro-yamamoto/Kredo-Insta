@@ -32,12 +32,12 @@ class PostController extends Controller{
         $request->validate([
             'category' => 'required|array|between:1,3',
             'description' => 'required|min:1|max:1000',
-            'image' => 'required|mimes:jpeg,png,jpg,gif|max:1048'
+            'images' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         //2. Save the post
         $this->post->user_id = Auth::user()->id;
-        $this->post->image = 'data:image/' . $request->image->extension() . ';base64,' . base64_encode(file_get_contents($request->image));
         $this->post->description = $request->description;
         $this->post->save();
 
@@ -46,6 +46,13 @@ class PostController extends Controller{
             $category_post[] = ['category_id' => $category_id];
         }
         $this->post->categoryPost()->createMany($category_post);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('post_images', 'public');
+                $this->post->images()->create(['image_path' => $path]);
+            }
+        }
 
         //4. Redirect to the home page
         return redirect()->route('index');
@@ -81,7 +88,7 @@ class PostController extends Controller{
         $request->validate([
             'category' => 'required|array|between:1,3',
             'description' => 'required|min:1|max:1000',
-            'image' => 'mimes:jpeg,png,jpg,gif|max:1048'
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         //2. Update the post
@@ -99,6 +106,13 @@ class PostController extends Controller{
             $category_post[] = ['category_id' => $category_id];
         }
         $post->categoryPost()->createMany($category_post);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('post_images', 'public');
+                $post->images()->create(['image_path' => $path]);
+            }
+        }
 
         //4. Redirect to the home page
         return redirect()->route('post.show', $id);

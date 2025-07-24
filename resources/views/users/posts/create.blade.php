@@ -25,8 +25,7 @@
           <div class="text-danger small">{{ $message }}</div>
         @enderror
       </div>
-      
-  
+
       <div class="row">
         <div class="col">
           <label for="description" class="form-label"><b>Description</b></label>
@@ -48,12 +47,17 @@
       </div>
       <div class="row mb-3">
         <div class="col">
-          <input type="file" class="form-control" name="image" id="image" aria-describedby="image">
-          <div id="image" class="form-text">
-            The acceptable formats are jpeg, png, and gif only.<br>
-            Max file size is 1048kb.
+          <div id="image-upload-wrapper">
+            <div class="mb-2">
+                <input type="file" name="images[]" class="form-control image-input">
+            </div>
           </div>
-          @error('image')
+
+          @error('images')
+            <div class="text-danger small">{{ $message }}</div>
+          @enderror
+
+          @error('images.*')
             <div class="text-danger small">{{ $message }}</div>
           @enderror
         </div>
@@ -68,3 +72,38 @@
   </div>
 </div>
 @endsection
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const wrapper = document.getElementById('image-upload-wrapper');
+  
+      // 最初の1つのinputを取得
+      const initialInput = wrapper.querySelector('.image-input');
+  
+      initialInput.addEventListener('change', handleInputChange);
+  
+      function handleInputChange(e) {
+          // 現在のinputの数
+          const inputs = wrapper.querySelectorAll('.image-input');
+          const currentInput = e.target;
+  
+          // ファイルが選ばれていて、inputが5つ未満なら追加
+          if (currentInput.files.length > 0 && inputs.length < 5) {
+              const newInput = document.createElement('input');
+              newInput.type = 'file';
+              newInput.name = 'images[]';
+              newInput.classList.add('form-control', 'image-input');
+              newInput.classList.add('mb-2');
+              wrapper.appendChild(newInput);
+  
+              // 次のinputにも同じイベントリスナを追加
+              newInput.addEventListener('change', handleInputChange);
+          }
+  
+          // 5つ以上なら追加しない
+          if (inputs.length >= 5) {
+              console.log('Maximum 5 images reached.');
+          }
+      }
+  });
+  </script>

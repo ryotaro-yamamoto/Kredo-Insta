@@ -172,3 +172,7 @@ following/followers
   display: none; /* Chrome, Safari, Opera */
 }
 
+.carousel-wrapper {
+  height: 600px;
+  overflow: hidden;
+}
