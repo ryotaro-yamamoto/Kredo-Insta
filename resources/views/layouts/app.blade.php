@@ -67,55 +67,63 @@
                                 </li>
                             @endif
                         @else
-                            <!-- Home -->
-                            <li class="nav-item" title="Home">
-                                <a href="{{ route('index') }}" class="nav-link"><i class="fa-solid fa-house text-dark icon-sm"></i></a>
-                            </i>
-                            <!-- Create post -->
-                            <li class="nav-item" title="Create Post">
-                                <a href="{{ route('post.create') }}" class="nav-link"><i class="fa-solid fa-circle-plus text-dark icon-sm"></i></a>
-                            </i>
-                            <!-- Account -->
-                            <li class="nav-item dropdown">
-                                <button id="account-dropdown" class="btn shadow-none nav-link" data-bs-toggle="dropdown">
-                                    @if(Auth::user()->avatar)
-                                        <img src="{{Auth::user()->avatar}}" alt="{{ Auth::user()->name }}" class="rounded-circle avatar-sm">
-                                    @else
-                                        <i class="fa-solid fa-circle-user text-dark icon-sm"></i>
-                                    @endif
-                                </button>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="account-dropdown">
-                                    <!-- [SOON] Admin Controls -->
-                                    @can('admin')
-
-                                    <a href="{{route('admin.users')}}" class="dropdown-item">
-                                        <i class="fa-solid fa-user-gear"></i> Admin
-                                    </a>
-                                    
-                                    <hr class="dropdown-divider">
-                                    @endcan
-
-                                    {{-- Profile --}}
-                                    <a href="{{ route('profile.show', Auth::user()->id) }}" class="dropdown-item">
-                                        <i class="fa-solid fa-circle-user"></i> Profile
-                                    </a>
-
-                                    {{-- Logout --}}
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
+                        <!-- Home -->
+                        <li class="nav-item" title="Home">
+                            <a href="{{ route('index') }}" class="nav-link"><i class="fa-solid fa-house text-dark icon-sm"></i></a>
+                        </li>
+                        <!-- Create post -->
+                        <li class="nav-item" title="Create Post">
+                            <a href="{{ route('post.create') }}" class="nav-link"><i class="fa-solid fa-circle-plus text-dark icon-sm"></i></a>
+                        </li>
+                        <!-- Message -->
+                        <li class="nav-item" title="Message">
+                            <a href="{{ route('messages.index',Auth::user()->id) }}" class="nav-link"><i class="fa-solid fa-message text-dark icon-sm"></i></a>
+                        </li>
+                        <!-- Mickey -->
+                        <li class="nav-item" title="Customer Support Mickey">
+                            <a href="{{ route('mickey') }}" class="nav-link"><i class="fa-solid fa-headset text-dark icon-sm"></i></a>
+                        </li>
+                        <!-- Account -->
+                        <li class="nav-item dropdown">
+                            <button id="account-dropdown" class="btn shadow-none nav-link" data-bs-toggle="dropdown">
+                                @if(Auth::user()->avatar)
+                                <img src="{{Auth::user()->avatar}}" alt="{{ Auth::user()->name }}" class="rounded-circle avatar-sm">
+                                @else
+                                <i class="fa-solid fa-circle-user text-dark icon-sm"></i>
+                                @endif
+                            </button>
+                            
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="account-dropdown">
+                                <!-- [SOON] Admin Controls -->
+                                @can('admin')
+                                
+                                <a href="{{route('admin.users')}}" class="dropdown-item">
+                                    <i class="fa-solid fa-user-gear"></i> Admin
+                                </a>
+                                
+                                <hr class="dropdown-divider">
+                                @endcan
+                                
+                                {{-- Profile --}}
+                                <a href="{{ route('profile.show', Auth::user()->id) }}" class="dropdown-item">
+                                    <i class="fa-solid fa-circle-user"></i> Profile
+                                </a>
+                                
+                                {{-- Logout --}}
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         <i class="fa-solid fa-right-from-bracket"></i> {{ __('Logout') }}
                                     </a>
-
+                                    
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
                             </li>
-                        @endguest
-                    </ul>
-                </div>
+                            @endguest
+                        </ul>
+                    </div>
             </div>
         </nav>
 
@@ -134,6 +142,12 @@
                                 </a>
                                 <a href="{{route('admin.categories')}}" class="list-group-item {{request()->is('admin/categories') ? 'active' : ''}}">
                                     <i class="fa-solid fa-tags"></i> Categories
+                                </a>
+                                <a href="{{route('admin.advertises')}}" class="list-group-item {{request()->is('admin/advertises') ? 'active' : ''}}">
+                                    <i class="fa-solid fa-rectangle-ad"></i> Advertises
+                                </a>
+                                <a href="{{route('admin.interests')}}" class="list-group-item {{request()->is('admin/interests') ? 'active' : ''}}">
+                                    <i class="fa-solid fa-person-circle-plus"></i> Interests
                                 </a>
                             </div>
                         </div>

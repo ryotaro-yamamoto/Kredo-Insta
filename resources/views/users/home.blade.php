@@ -12,8 +12,23 @@
                 {{-- body --}}
                 @include('users.posts.contents.body')
             </div>
+
+            {{-- 投稿5件ごとに広告を表示 --}}
+            @if ($loop->iteration % 5 === 0 && floor($loop->iteration / 5) - 1 < count($ads))
+                <div class="card mb-4 border border-warning">
+                    <div class="card-header bg-warning text-white fw-bold">
+                        Sponsored
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $ads[floor($loop->iteration / 5) - 1]->title }}</h5>
+                        <p class="card-text">{{ $ads[floor($loop->iteration / 5) - 1]->description }}</p>
+                        @if($ads[floor($loop->iteration / 5) - 1]->image)
+                            <img src="{{ $ads[floor($loop->iteration / 5) - 1]->image }}" alt="ad image" class="w-100">
+                        @endif
+                    </div>
+                </div>
+            @endif
         @empty
-            {{-- If the site doesn't have any Posts --}}
             <div class="text-center">
                 <h2>Share Photos</h2>
                 <p class="text-secondary">When you share photos, they'll appear on your profile.</p>
@@ -21,6 +36,7 @@
             </div>
         @endforelse
     </div>
+
     <div class="col-4">
         <div class="row align-items-center mb-5 bg-white shadow-sm rounded-3 py-3">
             <div class="col-auto">
@@ -34,10 +50,11 @@
             </div>
             <div class="col ps-0">
                 <a href="{{ route('profile.show', Auth::user()->id) }}" class="text-decoration-none text-dark fw-bold">{{ Auth::user()->name }}</a>
-                <p class="text-muted mb-0">{{Auth::user()->email}}</p>
+                <p class="text-muted mb-0">{{ Auth::user()->email }}</p>
             </div>
         </div>
-        {{-- suggestions --}}{{-- New(RIKO) --}}
+
+        {{-- suggestions --}}
         @if ($suggested_users)
             <div class="row">
                 <div class="col-auto">
@@ -50,7 +67,7 @@
             @foreach ($suggested_users as $user)
                 <div class="row align-items-center mb-3">
                     <div class="col-auto">
-                        <a href="{{route('profile.show', $user->id)}}">
+                        <a href="{{ route('profile.show', $user->id) }}">
                             @if ($user->avatar)
                                 <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="rounded-circle avatar-sm">
                             @else
@@ -59,12 +76,12 @@
                         </a>
                     </div>
                     <div class="col ps-0 text-truncate">
-                        <a href="{{route('profile.show', $user->id)}}" class="text-decoration-none text-dark fw-bold">
+                        <a href="{{ route('profile.show', $user->id) }}" class="text-decoration-none text-dark fw-bold">
                             {{ $user->name }}
                         </a>
                     </div>
                     <div class="col-auto">
-                        <form action="{{route('follow.store', $user->id)}}" method="post">
+                        <form action="{{ route('follow.store', $user->id) }}" method="post">
                             @csrf
                             <button type="submit" class="border-0 bg-transparent p-0 text-primary btn-sm">Follow</button>
                         </form>

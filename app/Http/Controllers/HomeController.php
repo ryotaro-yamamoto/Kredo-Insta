@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advertise;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,23 +29,82 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(){
-        $home_posts = $this->getHomePosts();
+        // $home_posts = $this->getHomePosts();
+        // $suggested_users = $this->getSuggestedUser();
+        // return view('users.home')
+        //         ->with('home_posts', $home_posts)
+        //         ->with('suggested_users', $suggested_users);
+        [$home_posts, $ads] = $this->getHomePosts(); // ← 広告も取得
         $suggested_users = $this->getSuggestedUser();
+
         return view('users.home')
-                ->with('home_posts', $home_posts)
-                ->with('suggested_users', $suggested_users);
+            ->with('home_posts', $home_posts)
+            ->with('ads', $ads)
+            ->with('suggested_users', $suggested_users);
     }
 
+    //New(RIKO)
+    // public function getHomePosts(){
+        // $user = Auth::user();
+        // $all_posts = $this->post->latest()->get();
+        // $home_posts = [];
+
+        // $ads = Advertise::whereHas('interests', function ($query) use ($user) {
+        //     $query->whereIn('interests.id', $user->interests->pluck('id'));
+        // })->get();
+        // return view('users.home', [
+        //     'home_posts' => $all_posts,
+        //     'ads' => $ads,
+        // ]);
+
+        // foreach ($all_posts as $post) {
+        //     if($post->user->isFollowed() || $post->user->id === Auth::user()->id){
+        //         $home_posts[] = $post;
+        //     }
+        // }
+        // return $home_posts;
+
+        //         $user = Auth::user();
+        //         $all_posts = $this->post->latest()->get();
+        //         $home_posts = [];
+            
+        //         $ads = Advertise::whereHas('interests', function ($query) use ($user) {
+        //             $query->whereIn('interests.id', $user->interests->pluck('id'));
+        //         })->get();
+            
+        //         return view('users.home', [  // ❌これが index() を止めてる
+        //             'home_posts' => $all_posts,
+        //             'ads' => $ads,
+        //         ]);
+                
+        //         // ここ以降は実行されない
+        //         foreach ($all_posts as $post) {
+        //             if($post->user->isFollowed() || $post->user->id === Auth::user()->id){
+        //                 $home_posts[] = $post;
+        //             }
+        //         }
+        //         return $home_posts;
+        
+    // }
+
     public function getHomePosts(){
+        $user = Auth::user();
         $all_posts = $this->post->latest()->get();
         $home_posts = [];
-
+    
+        // 条件に合う広告
+        $ads = Advertise::whereHas('interests', function ($query) use ($user) {
+            $query->whereIn('interests.id', $user->interests->pluck('id'));
+        })->get();
+    
+        // フォロー中または自分の投稿だけ抽出
         foreach ($all_posts as $post) {
-            if($post->user->isFollowed() || $post->user->id === Auth::user()->id){
+            if($post->user->isFollowed() || $post->user->id === $user->id){
                 $home_posts[] = $post;
             }
         }
-        return $home_posts;
+    
+        return [$home_posts, $ads]; // ✅ データだけ返す
     }
 
      //New(RIKO)//
@@ -112,4 +172,6 @@ class HomeController extends Controller
     
         return view('admin.posts.search', compact('all_posts', 'search'));
     }
+
+
 }

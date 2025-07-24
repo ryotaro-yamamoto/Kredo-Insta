@@ -19,6 +19,7 @@
         <th></th>
         <th>NAME</th>
         <th>EMAIL</th>
+        <th>INTEREST</th>
         <th>CREATED AT</th>
         <th>STATUS</th>
         <th></th>
@@ -38,6 +39,11 @@
             <a href="{{ route('profile.show', $user->id) }}" class="text-decoration-none text-dark fw-bold">{{ $user->name }}</a>
           </td>
           <td>{{ $user->email }}</td>
+          <td>
+            @foreach ($user->interests as $interest)
+            <span class="mx-0 badge bg-secondary">{{ $interest->name }}</span>
+            @endforeach
+          </td>
           <td>{{ $user->created_at }}</td>
           <td>
             @if ($user->trashed())

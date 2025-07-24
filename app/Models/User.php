@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Interest;
 
 class User extends Authenticatable
 {
@@ -57,16 +58,24 @@ class User extends Authenticatable
     }
 
     // To get the followers of the user
-    public function followers(){
-        return $this->hasMany(Follow::class, 'following_id');
+    // フォローしている人たち（自分がフォローしているユーザー一覧）
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id');
     }
 
-    // To get the users that the user is following
-    public function following(){
-        return $this->hasMany(Follow::class, 'follower_id');
+    // フォロワー（自分をフォローしているユーザー一覧）
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id');
     }
 
     public function isFollowed(){
         return $this->followers()->where('follower_id', Auth::user()->id)->exists();
+    }
+
+    public function interests()
+    {
+        return $this->belongsToMany(Interest::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Interest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,10 +23,15 @@ class ProfileController extends Controller
         return view('users.profile.show')->with('user', $user);
     }
 
+    //New(RIKO)//
     public function edit(){
         $user = $this->user->findOrFail(Auth::user()->id);
+        $interests = Interest::all(); // 追記
 
-        return view('users.profile.edit')->with('user', $user);
+        return view('users.profile.edit')->with([
+            'user' => $user,
+            'interests' => $interests // 追記
+        ]);
     }
 
     //New(RIKO)//
@@ -37,6 +43,9 @@ class ProfileController extends Controller
             'name' => 'required|min:1|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . Auth::user()->id,
             'introduction' => 'max:500',
+
+            // 追加: 興味（interests）
+            'interests' => 'nullable|array|exists:interests,id',
 
             // change password
             'current_password' => ['nullable', 'current_password'], 
@@ -52,11 +61,16 @@ class ProfileController extends Controller
         $user->email = $request->email;
         $user->introduction = $request->introduction;
 
+
         if ($request->avatar) {
             $user->avatar = 'data:image/' . $request->avatar->extension() . ';base64,' . base64_encode(file_get_contents($request->avatar));
         }
 
         $user->save();
+
+        if ($request->has('interests')) {
+            $user->interests()->sync($request->interests);
+        }
 
         return redirect()->route('profile.show', Auth::user()->id);
     }

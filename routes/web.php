@@ -1,16 +1,24 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\NewInterestController;
 use App\Http\Controllers\Admin\PostsController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\AdvertiseController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MickeyController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\Drivers\Web\WebDriver;
 
 Auth::routes();
 
@@ -18,7 +26,7 @@ Route::group(['middleware' => 'auth'], function () { //AREI
     Route::get('/', [HomeController::class, 'index'])->name('index');//Ryotaro
     Route::get('/suggestions', [HomeController::class, 'suggestions'])->name('suggestions.index');
     Route::get('/people', [HomeController::class, 'search'])->name('search'); //Riko
-
+    
     //Admin
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
         //Users
@@ -38,6 +46,20 @@ Route::group(['middleware' => 'auth'], function () { //AREI
         Route::patch('/categories/{id}/update', [CategoriesController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{id}/destroy', [CategoriesController::class, 'destroy'])->name('categories.destroy');
         Route::get('/categories/{id}/posts', [CategoriesController::class, 'posts'])->name('categories.posts');
+
+        //Advertises
+        Route::get('/advertises', [AdvertiseController::class, 'index'])->name('advertises');
+        Route::get('/advertises/create', [AdvertiseController::class, 'create'])->name('advertises.create');
+        Route::post('/advertises', [AdvertiseController::class, 'store'])->name('advertises.store');
+        Route::get('/advertises/{id}/edit', [AdvertiseController::class, 'edit'])->name('advertises.edit'); // ✨追加
+        Route::patch('/advertises/{id}/update', [AdvertiseController::class, 'update'])->name('advertises.update'); // ✨追加
+        Route::delete('/advertises/{id}/destroy', [AdvertiseController::class, 'destroy'])->name('advertises.destroy');
+
+        //Interests
+        Route::get('/interests', [NewInterestController::class, 'index'])->name('interests');
+        Route::get('/interests/create', [NewInterestController::class, 'create'])->name('interests.create');
+        Route::post('/interests', [NewInterestController::class, 'store'])->name('interests.store');
+        Route::delete('/interests/{id}/destroy', [NewInterestController::class, 'destroy'])->name('interests.destroy');
     });
 
     //Posts
@@ -69,5 +91,56 @@ Route::group(['middleware' => 'auth'], function () { //AREI
     Route::post('/follow/{user_id}/store', [FollowController::class, 'store'])->name('follow.store');
     Route::delete('/follow/{user_id}/destroy', [FollowController::class, 'destroy'])->name('follow.destroy');
 
+    //Messages
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index'); // 一覧
+    Route::get('/messages/{userId}', [MessageController::class, 'chat'])->name('messages.chat'); // 個別チャット
+    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('/mickey', [MickeyController::class, 'index'])->name('mickey'); //Riko
 
+});
+
+Route::match(['get', 'post'], '/botman', function (Request $request) {
+    DriverManager::loadDriver(WebDriver::class);
+
+    $botman = BotManFactory::create([]);
+
+    // 「質問」で選択肢を提示
+    $botman->hears('質問', function ($bot) {
+        $message = "どの質問を知りたいですか？<br>" .
+                   "1. ミッキーについて<br>" .
+                   "2. ミッキーさんがやったでしょ？<br>" .
+                   "3. ❤️<br>" .
+                   "4. You are smart.<br>" .
+                   "5. Memory.<br><br>" .
+                   "番号で答えてください！";
+    
+        $bot->reply($message);
+    });
+
+    // 各選択肢に対する応答
+    $botman->hears('1', function ($bot) {
+        $bot->reply('俺はと胸やねん');
+    });
+
+    $botman->hears('2', function ($bot) {
+        $bot->reply('ほんま俺ちゃうで！信じてや！');
+    });
+
+    $botman->hears('3', function ($bot) {
+        $bot->reply('たろや〜ん');
+    });
+    $botman->hears('4', function ($bot) {
+        $bot->reply('very thank you');
+    });
+    $botman->hears('5', function ($bot) {
+        $bot->reply('<a href="https://youtu.be/dNAMsBpl7eU" target="_blank" rel="noopener noreferrer">▶️ TAP to open YouTube</a>');
+    });
+    
+
+    // その他のメッセージ対応
+    $botman->fallback(function ($bot) {
+        $bot->reply('「質問」と送っていただければ、選択肢が出てきますよ！');
+    });
+
+    $botman->listen();
 });
