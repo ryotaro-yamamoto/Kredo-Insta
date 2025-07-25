@@ -56,6 +56,16 @@
                     </form>
                 </div>
             </div>
+            <div class="card mt-3 shadow-sm border-1 w-100 text-center mx-auto" style="max-width: 400px;">
+                <div class="card-body py-3">
+                    <span class="text-muted">
+                        {{ __("You have an account?") }}
+                        <a href="{{ route('login') }}" class="fw-semibold text-primary text-decoration-none">
+                            {{ __('Login') }}
+                        </a>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
