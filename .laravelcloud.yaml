@@ -1,4 +1,5 @@
 hooks:
   post-deploy:
+    - echo "✅ Post-deploy hook is running!"
     - php artisan storage:link
     - chmod -R 775 storage
