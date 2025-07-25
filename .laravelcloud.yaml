@@ -1,0 +1,4 @@
+hooks:
+  post-deploy:
+    - php artisan storage:link
+    - chmod -R 775 storage
