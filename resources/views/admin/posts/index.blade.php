@@ -21,8 +21,8 @@
         <tr>
           <td>{{$post->id}}</td>
           <td>
-            @if ($post->image)
-              <img src="{{ $post->image }}" alt="{{$post->id}}" class="d-block mx-auto image-md img-thumbnail">
+            @if ($post->images->isNotEmpty())
+              <img src="{{ asset('storage/' . $post->images->first()->image_path) }}" alt="Post image" class="d-block mx-auto image-md img-thumbnail">
             @else
               <i class="fa-solid fa-circle-user text-secondary icon-md d-block mx-auto"></i>
             @endif
