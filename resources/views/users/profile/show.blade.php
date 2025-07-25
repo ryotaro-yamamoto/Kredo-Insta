@@ -11,9 +11,11 @@
       <div class="row">
         @foreach ($user->posts as $post)
           <div class="col-lg-4 col-md-6 mb-4">
-            <a href="{{ route('post.show', $post->id) }}">
-              <img src="{{ asset('storage/' . $post->images->first()->image_path) }}" class="grid-img" alt="post">
-            </a>
+            @if ($post->images->isNotEmpty())
+              <a href="{{ route('post.show', $post->id) }}">
+                <img src="{{ asset('storage/' . $post->images->first()->image_path) }}" class="grid-img" alt="post">
+              </a>
+            @endif
           </div>
         @endforeach
       </div>
