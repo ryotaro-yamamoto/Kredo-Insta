@@ -8,6 +8,9 @@
       @csrf
       <div class="col-10">
         <input type="text" name="name" class="form-control" placeholder="Add a category">
+        @error('name')
+          <div class="text-danger small mt-1">{{ $message }}</div>
+        @enderror
       </div>
       <div class="col-2">
         <button type="submit" class="btn btn-primary">

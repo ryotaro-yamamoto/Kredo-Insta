@@ -12,6 +12,9 @@
           @method('PATCH')
           <div class="mb-3">
             <input type="text" name="name" id="name" class="form-control" value="{{$category->name}}" required>
+            @error('name')
+              <div class="text-danger small mt-1">{{ $message }}</div>
+            @enderror
             <div class="mt-3 d-flex justify-content-end">
               <button type="button" class="btn btn-outline-warning btn-sm me-2" data-bs-dismiss="modal">Cancel</button>
               <button type="submit" class="btn btn-warning btn-sm">Update</button>

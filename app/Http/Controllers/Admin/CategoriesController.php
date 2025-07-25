@@ -23,7 +23,7 @@ class CategoriesController extends Controller{
     public function store(Request $request){
         //1. Validate all from data
         $request->validate([
-            'name' => 'required|min:1|max:50'
+            'name' => 'required|min:1|max:50|unique:categories,name'
         ]);
 
         //2. Save the category
@@ -42,7 +42,7 @@ class CategoriesController extends Controller{
     public function update(Request $request, $id){
         //1. Validate all from data
         $request->validate([
-            'name' => 'required|min:1|max:50'
+            'name' => 'required|min:1|max:50|unique:categories,name,' . $id
         ]);
 
         //2. Update the category
