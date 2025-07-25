@@ -138,7 +138,7 @@
     const story = currentStories[currentIndex];
     recordStoryView(story.id);
 
-    storyImage.src = `/storage/${story.image_path}`;
+    storyImage.src = "{{ asset('storage') }}/" + story.image_path;
     document.getElementById('storyText').textContent = story.text ?? '';
 
     const expiresAt = new Date(story.expires_at);
