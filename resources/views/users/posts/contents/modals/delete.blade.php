@@ -9,7 +9,11 @@
       <div class="modal-body">
         <p>Are you sure you wan to delete this post?</p>
         <div class="mt-3">
-          <img src="{{$post->image}}" alt="post id {{$post->id}}" class="image-lg">
+          @if ($post->images->isNotEmpty())
+            <img src="{{ asset('storage/' . $post->images->first()->image_path) }}" alt="post id {{$post->id}}" class="image-lg">
+          @else
+            <img src="{{ asset('no-image.png') }}" alt="no image" class="image-lg">
+          @endif
           <p class="mt-1 text-muted">{{ $post->description }}</p>
         </div>
       </div>
