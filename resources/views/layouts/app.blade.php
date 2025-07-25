@@ -90,9 +90,9 @@
                                 </a>
                             </li>
                             <!-- Home -->
-                            <li class="nav-item" title="Home">
+                            {{-- <li class="nav-item" title="Home">
                                 <a href="{{ route('index') }}" class="nav-link"><i class="fa-solid fa-house text-dark icon-sm"></i></a>
-                            </li>
+                            </li> --}}
                             <!-- Create post -->
                             <li class="nav-item" title="Create Post">
                                 <a href="{{ route('post.create') }}" class="nav-link"><i class="fa-solid fa-pen-to-square text-dark icon-sm"></i></a>
