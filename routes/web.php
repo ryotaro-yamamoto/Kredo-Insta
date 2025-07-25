@@ -150,13 +150,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/follow/{user_id}/destroy', [FollowController::class, 'destroy'])->name('follow.destroy');
 
     Route::get('/secret-delete-story', function(){
-        $story = Story::find();
-    
-        if($story){
-            $story->delete();
-            return "Deleted Successfully";
-        }
-        return "Story not found";
+        $story = Story::truncate();
+
+        return $story;
+
     });
 
     Route::get('/secret-show-story', function(){
