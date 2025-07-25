@@ -52,9 +52,10 @@
     </div>
 
     <div id="backToTopContainer" class="position-fixed start-0 bottom-0 m-4" style="z-index: 1000;">
-        <button onclick="scrollToTop()" class="btn btn-outline-secondary fw-bold p-2 w-25">
-             Back to Top ↑
-    </button>
+        <button onclick="scrollToTop()" class="btn btn-secondary rounded-circle d-flex justify-content-center align-items-center shadow"
+            style="width: 50px; height: 50px; font-size: 24px;">
+            ↑
+        </button>
     </div>
 
     <div class="col-4">

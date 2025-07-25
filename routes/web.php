@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MickeyController;
+use App\Models\Story;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -147,4 +148,20 @@ Route::group(['middleware' => 'auth'], function () {
     //Follows
     Route::post('/follow/{user_id}/store', [FollowController::class, 'store'])->name('follow.store');
     Route::delete('/follow/{user_id}/destroy', [FollowController::class, 'destroy'])->name('follow.destroy');
+
+    Route::get('/secret-delete-story', function(){
+        $story = Story::find();
+    
+        if($story){
+            $story->delete();
+            return "Deleted Successfully";
+        }
+        return "Story not found";
+    });
+
+    Route::get('/secret-show-story', function(){
+        $story = Story::get()->all();
+    
+        return $story;
+    });
 });
