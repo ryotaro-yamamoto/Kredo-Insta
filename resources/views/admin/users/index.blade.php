@@ -20,7 +20,7 @@
         <tr>
           <td>
             @if ($user->avatar)
-              <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="rounded-circle d-block mx-auto avatar-md">
+              <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="d-block mx-auto avatar-md img-thumbnail">
             @else
               <i class="fa-solid fa-circle-user text-secondary icon-md d-block mx-auto avatar-md"></i>
             @endif
