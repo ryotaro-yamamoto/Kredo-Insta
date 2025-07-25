@@ -6,6 +6,7 @@
       <i class="fa-solid fa-circle-user text-secondary icon-lg d-block text-center"></i>
     @endif
   </div>
+  {{--  --}}
   <div class="col-8">
     <div class="row mb-3">
       <div class="col-auto">
